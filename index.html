@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>화이트데이 이벤트</title>
 
 <style>
@@ -19,10 +19,10 @@ body{
   padding:24px;
   overflow:hidden;
 
-  /* 첫 번째 배경 이미지: .png 확장자 반영 */
+  /* 메인 배경 이미지 */
   background-image:
     linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-    url("KakaoTalk_20260215_234053169.png");
+    url("KakaoTalk_20260215_234053169.jpg");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
@@ -53,9 +53,9 @@ h1{
 .btn-container{
   position:relative;
   width:280px;
-  height:100px;
+  height:120px; /* 도망갈 공간을 조금 더 확보 */
   margin:0 auto;
-  touch-action: manipulation;
+  touch-action: none; /* 모바일 브라우저 기본 동작 방지 */
 }
 
 .btn{
@@ -69,11 +69,11 @@ h1{
   cursor:pointer;
   user-select:none;
   z-index:20;
-  pointer-events:auto;
-  transition: transform .2s ease, left .2s ease, top .2s ease;
+  /* 모바일 반응 속도를 위해 transition 시간을 0.1초로 단축 */
+  transition: transform .1s ease, left .1s ease, top .1s ease;
 }
 
-.btn:active{ transform:scale(.98); }
+.btn:active{ transform:scale(.95); }
 
 .yes{ left:0; background:#ff4d6d; color:#fff; }
 .no { left:160px; background:#d6d6d6; color:#111; }
@@ -102,94 +102,3 @@ h1{
 
 <body>
   <div class="card">
-    <h1 id="question">
-      발렌타인데이에는 못만났지만<br>
-      화이트데이에 같이 데이트 할래?
-    </h1>
-
-    <div class="btn-container" id="btnArea">
-      <button class="btn yes" id="yesBtn" type="button">Yes</button>
-      <button class="btn no" id="noBtn" type="button">No</button>
-    </div>
-
-    <div class="result" id="result">❤️ 우리 화이트데이 데이트 확정 ❤️</div>
-  </div>
-
-<script>
-(function () {
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn  = document.getElementById("noBtn");
-  const btnArea = document.getElementById("btnArea");
-  const result = document.getElementById("result");
-  const question = document.getElementById("question");
-
-  let noClickCount = 0; 
-  let noScale = 1.0;    
-
-  const messages = ["제발~", "한 번만!", "진짜 안 할 거야?"];
-
-  if (!yesBtn || !noBtn || !btnArea) return;
-
-  yesBtn.addEventListener("click", () => {
-    // 두 번째 배경 이미지: .jpeg 확장자 반영
-    document.body.style.backgroundImage =
-      'linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url("img1.jpeg")';
-    
-    if (result) result.style.display = "block";
-    noBtn.style.display = "none";
-    createHearts();
-  });
-
-  function createHearts(){
-    for(let i=0;i<20;i++){
-      const h=document.createElement("div");
-      h.className="heart";
-      h.textContent="❤️";
-      h.style.left = (Math.random()*window.innerWidth) + "px";
-      h.style.top  = window.innerHeight + "px";
-      document.body.appendChild(h);
-      setTimeout(()=>h.remove(), 2800);
-    }
-  }
-
-  function moveNo(){
-    noClickCount++;
-
-    // No 버튼 크기 감소
-    if (noScale > 0.3) {
-      noScale -= 0.15;
-      noBtn.style.transform = `scale(${noScale})`;
-    }
-
-    // 2번 이상 피할 시 애원 문구 순차 노출
-    if (noClickCount >= 2) {
-      const msgIndex = Math.min(noClickCount - 2, messages.length - 1);
-      question.innerHTML = messages[msgIndex];
-    }
-
-    const w = noBtn.offsetWidth;
-    const h = noBtn.offsetHeight;
-    const maxX = btnArea.clientWidth - w;
-    const maxY = btnArea.clientHeight - h;
-
-    const x = Math.max(0, Math.random() * maxX);
-    const y = Math.max(0, Math.random() * maxY);
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top  = y + "px";
-  }
-
-  noBtn.addEventListener("mouseenter", moveNo);
-  noBtn.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    moveNo();
-  }, { passive:false });
-  noBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    moveNo();
-  });
-
-})(); 
-</script>
-</body>
-</html>
