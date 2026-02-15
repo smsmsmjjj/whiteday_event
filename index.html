@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>화이트데이 이벤트</title>
+
+<style>
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+button { -webkit-appearance: none; appearance: none; font: inherit; }
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:24px;
+  overflow:hidden;
+
+  /* 첫 번째 배경 이미지를 알려주신 파일명으로 교체했습니다 */
+  background-image:
+    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+    url("KakaoTalk_20260215_234053169.jpg");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  transition: background-image .5s ease;
+
+  font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+
+.card{
+  width:100%;
+  max-width:420px;
+  background:rgba(255,255,255,.95);
+  border-radius:20px;
+  padding:32px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
+  position:relative;
+  z-index:10;
+}
+
+h1{
+  font-size:20px;
+  line-height:1.6;
+  margin:0 0 24px;
+  min-height: 64px;
+}
+
+.btn-container{
+  position:relative;
+  width:280px;
+  height:100px;
+  margin:0 auto;
+  touch-action: manipulation;
+}
+
+.btn{
+  position:absolute;
+  top:0;
+  width:120px;
+  height:48px;
+  border:none;
+  border-radius:30px;
+  font-size:16px;
+  cursor:pointer;
+  user-select:none;
+  z-index:20;
+  pointer-events:auto;
+  transition: transform .2s ease, left .2s ease, top .2s ease;
+}
+
+.btn:active{ transform:scale(.98); }
+
+.yes{ left:0; background:#ff4d6d; color:#fff; }
+.no { left:160px; background:#d6d6d6; color:#111; }
+
+.result{
+  margin-top:18px;
+  font-size:20px;
+  font-weight:700;
+  color:#ff4d6d;
+  display:none;
+}
+
+.heart{
+  position:fixed;
+  pointer-events:none;
+  animation: float 2.8s linear forwards;
+  z-index:5;
+}
+
+@keyframes float{
+  0%{ transform:translateY(0); opacity:1; }
+  100%{ transform:translateY(-300px); opacity:0; }
+}
+</style>
+</head>
+
+<body>
+  <div class="card">
+    <h1 id="question">
+      발렌타인데이에는 못만났지만<br>
+      화이트데이에 같이 데이트 할래?
+    </h1>
+
+    <div class="btn-container" id="btnArea">
+      <button class="btn yes" id="yesBtn" type="button">Yes</button>
+      <button class="btn no" id="noBtn" type="button">No</button>
+    </div>
+
+    <div class="result" id="result">❤️ 우리 화이트데이 데이트 확정 ❤️</div>
+  </div>
+
+<script>
+(function () {
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn  = document.getElementById("noBtn");
+  const btnArea = document.getElementById("btnArea");
+  const result = document.getElementById("result");
+  const question = document.getElementById("question");
+
+  let noClickCount = 0; 
+  let noScale = 1.0;    
+
+  const messages = ["제발~", "한 번만!", "진짜 안 할 거야?"];
+
+  if (!yesBtn || !noBtn || !btnArea) return;
+
+  yesBtn.addEventListener("click", () => {
+    // 두 번째 배경 이미지(결과 화면) - 필요시 이 부분도 파일명을 수정하세요
+    document.body.style.backgroundImage =
+      'linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url("02.jpg")';
+    if (result) result.style.display = "block";
+    noBtn.style.display = "none";
+    createHearts();
+  });
+
+  function createHearts(){
+    for(let i=0;i<20;i++){
+      const h=document.createElement("div");
+      h.className="heart";
+      h.textContent="❤️";
+      h.style.left = (Math.random()*window.innerWidth) + "px";
+      h.style.top  = window.innerHeight + "px";
+      document.body.appendChild(h);
+      setTimeout(()=>h.
