@@ -19,10 +19,10 @@ body{
   padding:24px;
   overflow:hidden;
 
-  /* 첫 번째 배경 이미지를 알려주신 파일명으로 교체했습니다 */
+  /* 첫 번째 배경 이미지: .png 확장자 반영 */
   background-image:
     linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-    url("KakaoTalk_20260215_234053169.jpg");
+    url("KakaoTalk_20260215_234053169.png");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
@@ -131,9 +131,10 @@ h1{
   if (!yesBtn || !noBtn || !btnArea) return;
 
   yesBtn.addEventListener("click", () => {
-    // 두 번째 배경 이미지(결과 화면) - 필요시 이 부분도 파일명을 수정하세요
+    // 두 번째 배경 이미지: .jpeg 확장자 반영
     document.body.style.backgroundImage =
-      'linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url("02.jpg")';
+      'linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url("img1.jpeg")';
+    
     if (result) result.style.display = "block";
     noBtn.style.display = "none";
     createHearts();
@@ -147,4 +148,48 @@ h1{
       h.style.left = (Math.random()*window.innerWidth) + "px";
       h.style.top  = window.innerHeight + "px";
       document.body.appendChild(h);
-      setTimeout(()=>h.
+      setTimeout(()=>h.remove(), 2800);
+    }
+  }
+
+  function moveNo(){
+    noClickCount++;
+
+    // No 버튼 크기 감소
+    if (noScale > 0.3) {
+      noScale -= 0.15;
+      noBtn.style.transform = `scale(${noScale})`;
+    }
+
+    // 2번 이상 피할 시 애원 문구 순차 노출
+    if (noClickCount >= 2) {
+      const msgIndex = Math.min(noClickCount - 2, messages.length - 1);
+      question.innerHTML = messages[msgIndex];
+    }
+
+    const w = noBtn.offsetWidth;
+    const h = noBtn.offsetHeight;
+    const maxX = btnArea.clientWidth - w;
+    const maxY = btnArea.clientHeight - h;
+
+    const x = Math.max(0, Math.random() * maxX);
+    const y = Math.max(0, Math.random() * maxY);
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top  = y + "px";
+  }
+
+  noBtn.addEventListener("mouseenter", moveNo);
+  noBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    moveNo();
+  }, { passive:false });
+  noBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    moveNo();
+  });
+
+})(); 
+</script>
+</body>
+</html>
